@@ -1,33 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
     const btnLoad = document.getElementById("btnLoad");
-    const contProds = document.getElementById("contProds");
+    const contTarjetas = document.getElementById("contTarjetas");
     const URL = "https://api.escuelajs.co/api/v1/products";
 
     btnLoad.addEventListener('click', () => {
         fetch(URL)
         .then(response => response.json())
-        .then(data => {
-            const nueveProds = data[0, 9];
-            contProds.innerHTML = ''; 
-
-            nueveProds.forEach(product => {
-            const card = document.createElement('<div class="col-md-4"> </div>');
-            
-            card.innerHTML = `
-                <div class="card mb-4 shadow-sm">
-                <img src="${product.images[1]}" class="card-img-top" alt="${product.title}">
+        .then(products => {
+          contTarjetas.innerHTML = ""; 
+  
+          products.forEach(product => {
+            const col = document.createElement("div");
+            col.className = "col";
+  
+            col.innerHTML = `
+              <div class="card shadow-sm">
+                <img src="${product.images[0]}" class="bd-placeholder-img card-img-top" width="100%" height="225" style="object-fit: cover;">
                 <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description}</p>
-                    <p class="card-text fw-bold">$${product.price}</p>
+                  <h5 class="card-title">${product.title}</h5>
+                  <p class="card-text">${product.description}...</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                    <small class="text-body-secondary">$${product.price}</small>
+                  </div>
                 </div>
-                </div>
+              </div>
             `;
-            container.appendChild(card);
-            });
+  
+            contTarjetas.appendChild(col);
+          });
         })
         .catch(error => {
-            console.error('Error:', error);
+          console.error("Error loading products:", error);
         });
     });
-})
+});
